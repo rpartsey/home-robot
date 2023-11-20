@@ -175,7 +175,7 @@ def main():
     )
     parser.add_argument(
         "--train_scan_names_file",
-        default="meta_data/scannet_train.txt",
+        default="meta_data/scannetv2_train.txt",
         help="The path of the file that stores the scan names.",
     )
     parser.add_argument(

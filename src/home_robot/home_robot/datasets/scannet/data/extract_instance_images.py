@@ -67,6 +67,7 @@ def batch_export(output_folder, scan_names_file, scannet_dir, test_mode=False, n
         scannet_dir=scannet_dir,
         test_mode=test_mode,
     )
+    print(scan_names)
     with mp.Pool(nproc) as p:
         p.map(f, scan_names)
 
@@ -86,7 +87,7 @@ def main():
     )
     parser.add_argument(
         "--train_scan_names_file",
-        default="meta_data/scannet_train.txt",
+        default="meta_data/scannetv2_val.txt",
         help="The path of the file that stores the scan names.",
     )
     parser.add_argument(

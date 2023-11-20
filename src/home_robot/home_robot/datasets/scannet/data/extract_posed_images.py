@@ -184,64 +184,76 @@ class SensorData:
         )
 
 
-def process_scene(scene_path, out_path, limit, idx):
+def process_scene(path, limit, idx):
     """Process single ScanNet scene.
 
     Extract RGB images, poses and camera intrinsics.
     """
-    data = SensorData(os.path.join(scene_path, idx, f"{idx}.sens"), limit)
-    output_path = os.path.join(out_path, "posed_images", idx)
+    data = SensorData(os.path.join(path, idx, f'{idx}.sens'), limit)
+    output_path = os.path.join('posed_images', idx)
     data.export_depth_images(output_path)
     data.export_color_images(output_path)
     data.export_intrinsics(output_path)
     data.export_poses(output_path)
 
 
-def process_directory(path, out_path, limit, nproc):
-    print(f"processing {path}")
+def process_directory(path, limit, nproc):
+    print(f'processing {path}')
     mmengine.track_parallel_progress(
-        func=partial(process_scene, path, out_path, limit),
+        func=partial(process_scene, path, limit),
         tasks=os.listdir(path),
-        nproc=nproc,
-    )
+        nproc=nproc)
+
+# if __name__ == "__main__":
+#     parser = ArgumentParser()
+#     parser.add_argument("--max-images-per-scene", type=int, default=300)
+#     parser.add_argument("--nproc", type=int, default=8)
+#     parser.add_argument(
+#         "--scans-dir", type=str, default="/datasets01/scannet/082518/scans"
+#     )
+#     parser.add_argument(
+#         "--output-dir",
+#         type=str,
+#         default="/private/home/ssax/home-robot/projects/eval_scannet/scans",
+#     )
+#     parser.add_argument("--scans-test-dir", type=str, default=None)
+#     parser.add_argument("--output-test-dir", type=str, default=None)
+#     args = parser.parse_args()
+
+#     scans_path = Path(args.scans_dir)
+#     scans_test_path = (
+#         scans_path.parent / "scans_test"
+#         if args.scans_test_dir is None
+#         else args.scans_test_dir
+#     )
+#     scans_path = str(scans_path)
+#     out_path = Path(args.output_dir)
+#     out_test_path = (
+#         out_path.parent / "scans_test"
+#         if args.scans_test_dir is None
+#         else args.scans_test_dir
+#     )
+#     out_path = str(out_path)
+#     print(os.path.exists(scans_path))
+#     # process train and val scenes
+#     if os.path.exists(scans_path):
+#         process_directory(scans_path, out_path, args.max_images_per_scene, args.nproc)
+#     # process test scenes
+#     if os.path.exists(scans_test_path):
+#         process_directory(
+#             scans_test_path, out_test_path, args.max_images_per_scene, args.nproc
+#         )
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     parser = ArgumentParser()
-    parser.add_argument("--max-images-per-scene", type=int, default=300)
-    parser.add_argument("--nproc", type=int, default=8)
-    parser.add_argument(
-        "--scans-dir", type=str, default="/datasets01/scannet/082518/scans"
-    )
-    parser.add_argument(
-        "--output-dir",
-        type=str,
-        default="/private/home/ssax/home-robot/projects/eval_scannet/scans",
-    )
-    parser.add_argument("--scans-test-dir", type=str, default=None)
-    parser.add_argument("--output-test-dir", type=str, default=None)
+    parser.add_argument('--max-images-per-scene', type=int, default=300)
+    parser.add_argument('--nproc', type=int, default=8)
     args = parser.parse_args()
 
-    scans_path = Path(args.scans_dir)
-    scans_test_path = (
-        scans_path.parent / "scans_test"
-        if args.scans_test_dir is None
-        else args.scans_test_dir
-    )
-    scans_path = str(scans_path)
-    out_path = Path(args.output_dir)
-    out_test_path = (
-        out_path.parent / "scans_test"
-        if args.scans_test_dir is None
-        else args.scans_test_dir
-    )
-    out_path = str(out_path)
-    print(os.path.exists(scans_path))
     # process train and val scenes
-    if os.path.exists(scans_path):
-        process_directory(scans_path, out_path, args.max_images_per_scene, args.nproc)
+    if os.path.exists('scans'):
+        process_directory('scans', args.max_images_per_scene, args.nproc)
     # process test scenes
-    if os.path.exists(scans_test_path):
-        process_directory(
-            scans_test_path, out_test_path, args.max_images_per_scene, args.nproc
-        )
+    if os.path.exists('scans_test'):
+        process_directory('scans_test', args.max_images_per_scene, args.nproc)

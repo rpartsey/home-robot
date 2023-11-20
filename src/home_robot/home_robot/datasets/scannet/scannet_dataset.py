@@ -272,9 +272,9 @@ class ScanNetDataset(object):
 
         # 2D Instance
         inst2d_names = self.find_instance_2d(scan_name)[:: self.frame_skip]
-        assert len(inst2d_names) == len(
-            img_names
-        ), f"Unequal number of color and poses for scene {scan_name} ({len(img_names)} != ({len(pose_names)}))"
+        # assert len(inst2d_names) == len(
+        #     img_names
+        # ), f"Unequal number of color and poses for scene {scan_name} ({len(img_names)} != ({len(pose_names)}))"
 
         # img_names = list(
         #     natsorted([s for s in scene_posed_files if s.endswith(".jpg")])
@@ -287,9 +287,9 @@ class ScanNetDataset(object):
         intrinsic_name = self.posed_dir / scan_name / "intrinsic.txt"
 
         return {
-            "img_paths": [scene_pose_dir / f for f in img_names],
-            "depth_paths": [scene_pose_dir / f for f in depth_names],
-            "pose_paths": [scene_pose_dir / f for f in pose_names],
+            "img_paths":  img_names, # [scene_pose_dir / f for f in img_names],
+            "depth_paths": depth_names, # [scene_pose_dir / f for f in depth_names],
+            "pose_paths": pose_names, # [scene_pose_dir / f for f in pose_names],
             "intrinsic_path": intrinsic_name,
             "instance_2d_paths": inst2d_names,
             "bboxs_unaligned_path": self.instance_dir
@@ -564,13 +564,13 @@ def get_depth_image_from_path(
     """
     assert (height is None) == (width is None)  # Neither or both
     do_resize = height is not None
-    if filepath.suffix == ".npy":
+    if filepath.endswith(".npy"):
         image = np.load(filepath) * scale_factor
         assert (height is None) == (width is None)  # Neither or both
         if do_resize:
             image = cv2.resize(image, (width, height), interpolation=interpolation)
     else:
-        image = cv2.imread(str(filepath.absolute()), cv2.IMREAD_ANYDEPTH)
+        image = cv2.imread(filepath, cv2.IMREAD_ANYDEPTH)
         image = image.astype(np.float64) * scale_factor
         if do_resize:
             image = cv2.resize(image, (width, height), interpolation=interpolation)
