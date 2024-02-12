@@ -390,7 +390,7 @@ def create_separate_box_traces(
         if len(existing_figure) <= target_idx:
             target_idx = None
         box_class = svm_watcher.box_names[obs_idx][box_idx].item()
-        box_class_name = svm_watcher._vocab[box_class]
+        box_class_name = svm_watcher._vocab.get(box_class, "foo")
         counts[box_class] += 1
         box_name = f"{box_class_name}-{counts[box_class]}"
         box_class_names.append(box_name)

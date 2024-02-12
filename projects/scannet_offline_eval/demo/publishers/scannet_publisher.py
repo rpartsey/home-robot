@@ -20,7 +20,7 @@ from tqdm import tqdm
 from home_robot.agent.multitask.sparse_voxel_instance_map import SparseVoxelMapAgent
 from home_robot.core.interfaces import Observations
 from home_robot.datasets.scannet import ScanNetDataset
-from home_robot.mapping.semantic.instance_tracking_modules import Instance
+# from home_robot.mapping.semantic.instance_tracking_modules import Instance
 from home_robot.mapping.voxel.voxel_publisher import FilePublisher
 
 logger = logging.getLogger(__name__)

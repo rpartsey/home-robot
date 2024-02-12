@@ -33,11 +33,11 @@ HARD_CODE_RESPONSES = False
 
 @dataclass
 class AppConfig:
-    pointcloud_update_freq_ms: int = 2000
-    video_feed_update_freq_ms: int = 500  # 500
+    pointcloud_update_freq_ms: int = 3000
+    video_feed_update_freq_ms: int = 3000  # 500
 
-    directory_watcher_update_freq_ms: int = 200  # 500
-    directory_watch_path: Optional[str] = get_most_recent_viz_directory()
+    directory_watcher_update_freq_ms: int = 3000  # 500
+    directory_watch_path: Optional[str] = "/home/rpartsey/code/eai/cortex/accel-cortex-fork/submodules/home_robot/projects/scannet_offline_eval/demo/publishers/published_trajectory/obs" # get_most_recent_viz_directory()
     pointcloud_voxel_size: float = 0.035
     convert_rgb_to_bgr: bool = True
     ignore_box_classes: List[int] = field(default_factory=list)
@@ -155,8 +155,8 @@ class SparseVoxelMapDirectoryWatcher:
 
         # Update RGB
         rgb_image = obs["rgb"]
-        rgb_ten = rgb_image[..., RGB_TO_BGR] if self.convert_rgb_to_bgr else obs["rgb"]
-        self.rgb_jpeg = cv2.imencode(".jpg", (rgb_ten.cpu().numpy()).astype(np.uint8))[
+        rgb_ten = rgb_image[..., RGB_TO_BGR] if self.convert_rgb_to_bgr else rgb_image
+        self.rgb_jpeg = cv2.imencode(".jpg", (rgb_ten.cpu().numpy() * 255).astype(np.uint8))[
             1
         ].tobytes()  # * 255
 
@@ -183,8 +183,8 @@ class SparseVoxelMapDirectoryWatcher:
         if "limited_obs" in obs and obs["limited_obs"]:
             return True
 
-        if obs["target_id"] is not None:
-            self.target_instance_id = obs["target_id"]
+        # if obs["target_id"] is not None:
+        #     self.target_instance_id = obs["target_id"]
         # Update map
         if "obstacles" in obs:
             rgb_ten = (torch.flip(obs["obstacles"], dims=(0, 1)) > 0) * 255

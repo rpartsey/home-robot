@@ -16,7 +16,7 @@ from atomicwrites import atomic_write
 from tqdm import tqdm
 
 from home_robot.core.interfaces import Observations
-from home_robot.mapping.semantic.instance_tracking_modules import Instance
+# from home_robot.mapping.semantic.instance_tracking_modules import Instance
 from home_robot.mapping.voxel.voxel import SparseVoxelMap
 from home_robot.utils.threading import Interval
 

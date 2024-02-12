@@ -1,5 +1,5 @@
 _target_: home_robot.datasets.scannet.ScanNetDataset
-root_dir: '/private/home/ssax/home-robot/src/home_robot/home_robot/datasets/scannet/data'
+root_dir: '/home/rpartsey/code/eai/cortex/accel-cortex-fork/submodules/home_robot/src/home_robot/home_robot/datasets/scannet/data'
 split: "val"
 keep_only_scenes: null
 keep_only_first_k_scenes: 5
